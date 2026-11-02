@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe"
+      crossorigin="anonymous"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="bg-dark">
+    <div class="container mt-5">
+      <h1 class="text-center mb-5 fw-bold text-primary">Egeria Store</h1>
+
+      <div id="landpage">
+        <div class="row">
+          <div class="col md-6">
+            <div class="card shadow-sm mb-4">
+              <div class="card-header bg-primary">
+                <h4 class="mb-0">daftar menu</h4>
+              </div>
+              <div class="card-body">
+                <div id="areaMenu"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col md-6">
+            <div class="card shadow-sm mb-4">
+              <div class="card-header bg-danger">
+                <h4 class="mb-0">daftar keranjang</h4>
+              </div>
+              <div class="card-body">
+                <div id="areaKeranjang"></div>
+              </div>
+              <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h4 class="mb-0">total: </h4>
+                  <h4 class="mb-0" id="totalHarga">Rp 0</h4>
+                </div>
+                <div>
+                  <button
+                    onclick="prosesCheckout()"
+                    class="btn-solid theme-success w-100"
+                  >Payment</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="strukpage"></div>
+    </div>
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>

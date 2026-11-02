@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pembayaran — Egeria Store</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090b0d;
+        --panel: #070707;
+        --line: #30383d;
+        --muted: #aeb8bd;
+        --green: #08b765;
+        --blue: #a82011;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 32px 16px;
+        background: var(--bg);
+        color: #f4f7f8;
+        font:
+          16px/1.5 system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      main {
+        width: min(960px, 100%);
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font-size: clamp(1.7rem, 4vw, 2.3rem);
+      }
+      .intro {
+        margin: 0 0 24px;
+        color: var(--muted);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+        align-items: start;
+      }
+      .card {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--panel);
+      }
+      .card h2 {
+        margin: 0;
+        padding: 14px 18px;
+        background: var(--blue);
+        font-size: 1.1rem;
+      }
+      .body {
+        padding: 18px;
+      }
+      .items {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .items li {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .items li:last-child {
+        border: 0;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .summary {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .qris-wrap {
+        display: grid;
+        place-items: center;
+        padding: 10px;
+        border-radius: 12px;
+        background: #fff;
+      }
+      .qris-wrap img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 70vh;
+        object-fit: contain;
+      }
+      .note {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .steps {
+        margin: 16px 0 0;
+        padding-left: 20px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      .steps li {
+        margin: 6px 0;
+      }
+      .empty {
+        color: var(--muted);
+        text-align: center;
+        padding: 18px 0;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      a.button,
+      button {
+        flex: 1;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 44px;
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        background: var(--green);
+        color: white;
+        text-decoration: none;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      a.secondary {
+        background: #283137;
+      }
+      @media (max-width: 700px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        body {
+          padding-top: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Pembayaran</h1>
+      <p class="intro">Periksa pesananmu, lalu scan QRIS untuk membayar.</p>
+      <div class="layout">
+        <section class="card" aria-labelledby="orderTitle">
+          <h2 id="orderTitle">Keranjang Belanja</h2>
+          <div class="body">
+            <ul class="items" id="checkoutItems"></ul>
+            <div class="summary">
+              <span>Total</span><span id="checkoutTotal">Rp 0</span>
+            </div>
+            <div class="actions">
+              <a class="button secondary" href="index.html">Kembali ke menu</a>
+              <button type="button" id="paidButton">Saya sudah membayar</button>
+            </div>
+          </div>
+        </section>
+        <section class="card" aria-labelledby="payTitle">
+          <h2 id="payTitle">Kode Pembayaran QRIS</h2>
+          <div class="body">
+            <div class="qris-wrap">
+              <img
+                src="qris.jpeg"
+                alt="QRIS Egeria Store"
+                onerror="
+                  this.style.display = 'none';
+                  document.getElementById('qrisMissing').hidden = false;
+                "
+              />
+            </div>
+            
+            <ol class="steps">
+              <li>Buka aplikasi pembayaran atau mobile banking.</li>
+              <li>Pilih Scan QRIS dan scan kode di atas.</li>
+              <li>
+                Pastikan nama merchant dan nominal sesuai sebelum membayar.
+              </li>
+            </ol>
+            <p class="note">
+              Status pembayaran belum diverifikasi otomatis. Konfirmasi
+              pembayaran secara manual melalui aplikasi atau sistem kasir.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script>
+      // Integrasi: simpan keranjang dari halaman menu dengan localStorage.setItem("keranjang", JSON.stringify(keranjang)).
+      const daftarMenu = [
+        "kopi itam",
+        "kopi susu",
+        "milktea",
+        "americano",
+        "matcha",
+      ];
+      const hargaMenu = [5000, 10000, 5000, 10000, 15000];
+      const contohPesanan = [{ nama: "kopi susu", harga: 10000, jumlah: 1 }];
+
+      function bacaPesanan() {
+        try {
+          const data = JSON.parse(localStorage.getItem("keranjang") || "null");
+          if (!Array.isArray(data) || data.length === 0) return contohPesanan;
+          // Mendukung keranjang berupa indeks menu (misalnya [0, 2, 2]) atau daftar objek.
+          if (data.every((item) => Number.isInteger(item))) {
+            return data
+              .map((index) => ({
+                nama: daftarMenu[index],
+                harga: hargaMenu[index],
+                jumlah: 1,
+              }))
+              .filter((item) => item.nama);
+          }
+          return data
+            .map((item) => {
+              if (Number.isInteger(item))
+                return {
+                  nama: daftarMenu[item],
+                  harga: hargaMenu[item],
+                  jumlah: 1,
+                };
+              return {
+                nama: item.nama,
+                harga: Number(item.harga),
+                jumlah: Number(item.jumlah || 1),
+              };
+            })
+            .filter((item) => item.nama && Number.isFinite(item.harga));
+        } catch {
+          return contohPesanan;
+        }
+      }
+
+      const rupiah = (nilai) =>
+        new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          maximumFractionDigits: 0,
+        }).format(nilai);
+      const pesanan = bacaPesanan();
+      const daftar = document.getElementById("checkoutItems");
+      let total = 0;
+      if (!pesanan.length) {
+        daftar.innerHTML = '<li class="empty">Keranjang masih kosong.</li>';
+      } else {
+        daftar.innerHTML = pesanan
+          .map((item) => {
+            const subtotal = item.harga * item.jumlah;
+            total += subtotal;
+            return `<li><span>${item.nama}<span class="muted"> × ${item.jumlah}</span></span><strong>${rupiah(subtotal)}</strong></li>`;
+          })
+          .join("");
+      }
+      document.getElementById("checkoutTotal").textContent = rupiah(total);
+      document
+        .getElementById("paidButton")
+        .addEventListener("click", () =>
+          alert("Terima kasih! Silakan konfirmasi pembayaran ke kasir."),
+        );
+    </script>
+  </body>
+</html>
